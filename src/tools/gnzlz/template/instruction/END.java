@@ -1,7 +1,7 @@
-package tools.gnzlz.templete.instruction;
+package tools.gnzlz.template.instruction;
 
-import tools.gnzlz.templete.Template.Template;
-import tools.gnzlz.templete.instruction.base.InstructionSimple;
+import tools.gnzlz.template.Template.Template;
+import tools.gnzlz.template.instruction.base.InstructionSimple;
 
 public class END extends InstructionSimple {
 

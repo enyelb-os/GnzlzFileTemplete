@@ -1,7 +1,7 @@
-package tools.gnzlz.templete.instruction.base;
+package tools.gnzlz.template.instruction.base;
 
-import tools.gnzlz.templete.instruction.Type;
-import tools.gnzlz.templete.Template.Template;
+import tools.gnzlz.template.instruction.Type;
+import tools.gnzlz.template.Template.Template;
 
 import java.util.ArrayList;
 

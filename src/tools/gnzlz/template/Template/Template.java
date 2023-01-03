@@ -1,12 +1,15 @@
-package tools.gnzlz.templete.Template;
+package tools.gnzlz.template.Template;
 
-import tools.gnzlz.templete.instruction.*;
-import tools.gnzlz.templete.instruction.base.InstructionMultiple;
-import tools.gnzlz.templete.instruction.base.InstructionSimple;
-import tools.gnzlz.templete.instruction.base.Utils;
+import tools.gnzlz.template.instruction.*;
+import tools.gnzlz.template.instruction.base.InstructionMultiple;
+import tools.gnzlz.template.instruction.base.InstructionSimple;
+import tools.gnzlz.template.instruction.base.Utils;
+import tools.gnzlz.template.reflection.ObjectCustom;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,14 +22,14 @@ public class Template {
 
     public static String path = "";
 
-    protected final Hashtable<String, Object> data;
-    protected final String content;
-    protected final String symbol;
-    protected final String symbolStart;
-    protected final String symbolEnd;
-    protected final Pattern pattern;
-    protected final ArrayList<InstructionSimple> instructions;
-    protected final ArrayList<Integer> lns;
+    protected Hashtable<String, Object> data;
+    protected String content;
+    protected String symbol;
+    protected String symbolStart;
+    protected String symbolEnd;
+    protected Pattern pattern;
+    protected ArrayList<InstructionSimple> instructions;
+    protected ArrayList<Integer> lns;
 
     /**********************************
      * constructor
@@ -118,24 +121,23 @@ public class Template {
             /**
              * end of instruction
              */
-            int nextEndSymbol = content.indexOf(symbolEnd, match.end() + 1);
             if(Utils.valid(this, match,"VAR")){
                 /**
                  * create instruction type VAR
                  */
-                instruction = new VAR(matcher.start(), nextEndSymbol);
+                instruction = new VAR(matcher.start(), seacrhNextEndSymbol(content, match.end()));
 
             }else if(Utils.valid(this, match,"FOR")){
                 /**
                  * create instruction type FOR
                  */
-                instruction = new FOR(matcher.start(), nextEndSymbol);
+                instruction = new FOR(matcher.start(), seacrhNextEndSymbol(content, match.end()));
 
             }else if(Utils.valid(this, match,"IF")){
                 /**
                  * create instruction type IF
                  */
-                instruction = new IF(matcher.start(), nextEndSymbol);
+                instruction = new IF(matcher.start(), seacrhNextEndSymbol(content, match.end()));
 
             }else if(Utils.valid2(this, match,"ENDFOR")){
                 /**
@@ -151,7 +153,7 @@ public class Template {
                 /**
                  * create instruction type END, add in multiple (select last on hold)
                  */
-                onhold.get(onhold.size() - 1).addMultiple(new END(Type.ENDIF, matcher.start(), matcher.end()));
+                onhold.get(onhold.size() - 1).addEnd(new END(Type.ENDIF, matcher.start(), matcher.end()));
                 /**
                  * remove last element the onhold
                  */
@@ -161,28 +163,27 @@ public class Template {
                 /**
                  * create instruction type ELSE add in multiple (select last on hold)
                  */
-                onhold.get(onhold.size() - 1).addMultiple(IF.ELSE(matcher.start(), matcher.end()));
+                instruction = IF.ELSE(matcher.start(), matcher.end());
+                onhold.get(onhold.size() - 1).addEnd(instruction);
 
             }else if(Utils.valid(this, match,"ELSEIF")){
                 /**
                  * create instruction type ELSEIF add in multiple (select last on hold)
                  */
-                onhold.get(onhold.size() - 1).addMultiple(IF.ELSEIF(matcher.start(), matcher.end()));
+                instruction = IF.ELSEIF(matcher.start(), seacrhNextEndSymbol(content, match.end()));
+                onhold.get(onhold.size() - 1).addEnd(instruction);
             }
 
             /**
              * if "nextEndSymbol" is equal to "waitingForArguments.end"
              * means "waitingForArguments.end" not found
              */
-            if(waitingForArgumnet.get() != null && waitingForArgumnet.get().end == nextEndSymbol && instruction != null){
+
+            if(waitingForArgumnet.get() != null && instruction != null && waitingForArgumnet.get().end > instruction.end){
                 /**
                  * add argument
                  */
                 waitingForArgumnet.get().addArgument(instruction);
-                /**
-                 * search to true "waitingForArguments.end"
-                 */
-                waitingForArgumnet.get().end = content.indexOf(symbolEnd, nextEndSymbol + 1);
 
             }else if(waitingForArgumnet.get() != null){
                 /**
@@ -206,8 +207,14 @@ public class Template {
                     /**
                      * add in internal (select last on hold)
                      */
-                    onhold.get(onhold.size() - 1).addInternal(instruction);
-
+                    InstructionSimple onholdInstructionSimple = onhold.get(onhold.size() - 1);
+                    if((onholdInstructionSimple.type == Type.IF || onholdInstructionSimple.type == Type.ELSEIF) &&
+                            (instruction.type == Type.ELSEIF || instruction.type == Type.ELSE)){
+                        onhold.remove(onhold.size() - 1);
+                        onhold.add((InstructionMultiple) instruction);
+                    } else{
+                        onhold.get(onhold.size() - 1).addInternal(instruction);
+                    }
                 }
                 /**
                  * add onhold (because they can contain internal instructions)
@@ -230,17 +237,6 @@ public class Template {
     public int prepareStart(InstructionSimple instruction){
         if(instruction instanceof InstructionMultiple){
             return ln(indexLnFirst(instruction.start, ((InstructionMultiple) instruction).end().end) - 1, instruction.start);
-        }
-        return instruction.start;
-    }
-
-    /**********************************
-     * prepareStartBefore
-     **********************************/
-
-    public int prepareStartBefore(InstructionSimple instruction){
-        if(instruction instanceof InstructionMultiple){
-            return ln(indexLnBefore(instruction.start), instruction.start);
         }
         return instruction.start;
     }
@@ -273,47 +269,6 @@ public class Template {
     }
 
     /**********************************
-     * Index Ln Last
-     **********************************/
-
-    public int indexLnLast(int start, int end){
-        for (int i = lns.size() - 1; i >= 0 ; i--){
-            if(lns.get(i) > start && lns.get(i) < end){
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**********************************
-     * Index Ln Before
-     **********************************/
-
-    public int indexLnBefore(int start){
-        int before = -1;
-        for (int i = 0; i < lns.size(); i++){
-            if(lns.get(i) > start){
-                return before;
-            }
-            before = i;
-        }
-        return -1;
-    }
-
-    /**********************************
-     * Index Ln Before
-     **********************************/
-
-    public int indexLnAfter(int end){
-        for (int i = 0; i < lns.size(); i++){
-            if(lns.get(i) > end){
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**********************************
      * Index Ln
      **********************************/
 
@@ -329,6 +284,11 @@ public class Template {
      **********************************/
 
     public Template object(String key, Object value) {
+        data.put(key, value);
+        return this;
+    }
+
+    public Template object(String key, ObjectCustom value) {
         data.put(key, value);
         return this;
     }
@@ -370,16 +330,24 @@ public class Template {
      * static
      **********************************/
 
+    public static Template file(String url, boolean internal, String symbol, String start, String end){
+        return new Template(File.read(path+url, internal), symbol, start, end);
+    }
+
     public static Template file(String url, String symbol, String start, String end){
-        return new Template(File.read(path+url), symbol, start, end);
+        return Template.file(url, true, symbol, start, end);
     }
 
     /**********************************
      * static
      **********************************/
 
+    public static Template file(String url, boolean internal){
+        return new Template(File.read(path+url, internal));
+    }
+
     public static Template file(String url){
-        return new Template(File.read(path+url));
+        return Template.file(url, true);
     }
 
     /**********************************
@@ -389,5 +357,56 @@ public class Template {
     public boolean create(String url, String name, String ext, boolean replace){
         return File.create(url, name, ext, this.build(), replace);
     }
+
+    /**********************************
+     * static
+     **********************************/
+
+    public boolean create(){
+        String contentProps = this.build();
+        AtomicInteger integer = new AtomicInteger(0);
+        AtomicReference<String> url = new AtomicReference<String>("");
+        AtomicReference<String> name = new AtomicReference<String>("");
+        AtomicBoolean replace = new AtomicBoolean(false);
+        AtomicBoolean create = new AtomicBoolean(true);
+        contentProps.lines().forEach((line)->{
+            if(line.contains("PATH:") || line.contains("NAME:") || line.contains("REPLACE:")){
+                integer.set(integer.get() + line.length() + System.lineSeparator().length());
+                String result[] = line.split(":");
+                if(result.length > 1){
+                    if(line.contains("PATH:")){
+                        url.set(result[1].trim());
+                    }else if(line.contains("NAME:")){
+                        name.set(result[1].trim());
+                    }else if(line.contains("REPLACE:")){
+                        replace.set(result[1].trim().equalsIgnoreCase("true"));
+                    }else if(line.contains("CREATE:")){
+                        create.set(result[1].trim().equalsIgnoreCase("true"));
+                    }
+                }
+            }
+        });
+        if(!url.get().isEmpty() && !name.get().isEmpty() && create.get()){
+            return File.create(url.get(), name.get(), contentProps.substring(integer.get()), replace.get());
+        }
+        return false;
+    }
+
+    private int seacrhNextEndSymbol(String content, int i){
+        int countFind = 0;
+        int end = content.indexOf(symbolEnd, i-1);
+        int start = content.indexOf(symbolStart, i+1);
+        do {
+            if(countFind > 0){
+                end = content.indexOf(symbolEnd, end + 1);
+                countFind--;
+                start = content.indexOf(symbolStart, start+1);
+            }
+            if(start < end && start != -1){
+                countFind++;
+            }
+        } while (countFind != 0);
+        return end;
+    };
 
 }

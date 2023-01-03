@@ -1,6 +1,6 @@
-package tools.gnzlz.templete.instruction.base;
+package tools.gnzlz.template.instruction.base;
 
-import tools.gnzlz.templete.instruction.Type;
+import tools.gnzlz.template.instruction.Type;
 
 import java.util.ArrayList;
 
@@ -20,13 +20,6 @@ public abstract class InstructionMultiple extends InstructionSimple {
 
     public void addEnd(InstructionSimple instruction){
         endInstruction = instruction;
-    }
-    public void addMultiple(InstructionSimple instruction){
-        if(endInstruction instanceof InstructionMultiple){
-            ((InstructionMultiple) endInstruction).addEnd(instruction);
-        }else{
-            endInstruction = instruction;
-        }
     }
 
     public InstructionSimple end(){

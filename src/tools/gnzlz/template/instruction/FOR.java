@@ -1,10 +1,10 @@
-package tools.gnzlz.templete.instruction;
+package tools.gnzlz.template.instruction;
 
-import tools.gnzlz.templete.Template.Template;
-import tools.gnzlz.templete.instruction.base.InstructionMultiple;
-import tools.gnzlz.templete.instruction.base.InstructionSimple;
-import tools.gnzlz.templete.instruction.base.Utils;
-import tools.gnzlz.templete.reflection.Field;
+import tools.gnzlz.template.Template.Template;
+import tools.gnzlz.template.instruction.base.InstructionMultiple;
+import tools.gnzlz.template.instruction.base.InstructionSimple;
+import tools.gnzlz.template.instruction.base.Utils;
+import tools.gnzlz.template.reflection.Field;
 
 public class FOR extends InstructionMultiple {
 

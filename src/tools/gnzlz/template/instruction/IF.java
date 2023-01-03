@@ -1,10 +1,10 @@
-package tools.gnzlz.templete.instruction;
+package tools.gnzlz.template.instruction;
 
-import tools.gnzlz.templete.Template.Template;
-import tools.gnzlz.templete.expression.Resolver;
-import tools.gnzlz.templete.instruction.base.InstructionMultiple;
-import tools.gnzlz.templete.instruction.base.InstructionSimple;
-import tools.gnzlz.templete.instruction.base.Utils;
+import tools.gnzlz.template.Template.Template;
+import tools.gnzlz.template.expression.Resolver;
+import tools.gnzlz.template.instruction.base.InstructionMultiple;
+import tools.gnzlz.template.instruction.base.InstructionSimple;
+import tools.gnzlz.template.instruction.base.Utils;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -36,7 +36,6 @@ public class IF extends InstructionMultiple {
     public Object execute(String content, Template template) {
         String contentif = content.substring(start + start(template), end);
         boolean results[] = prepareData(contentif, content, template);
-
         if(type == Type.ELSE || validateResults(results, contentif)){
             String resultContent = "";
             int i = Utils.positionStartCharacterValid(content, end + template.symbolEnd().length(), endInstruction.start);

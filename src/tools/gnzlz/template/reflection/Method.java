@@ -1,4 +1,4 @@
-package tools.gnzlz.templete.reflection;
+package tools.gnzlz.template.reflection;
 
 import java.lang.reflect.InvocationTargetException;
 

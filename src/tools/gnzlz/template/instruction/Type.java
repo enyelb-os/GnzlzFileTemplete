@@ -1,4 +1,4 @@
-package tools.gnzlz.templete.instruction;
+package tools.gnzlz.template.instruction;
 
 public enum Type {
     VAR,
