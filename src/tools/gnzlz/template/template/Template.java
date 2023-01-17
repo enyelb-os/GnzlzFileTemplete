@@ -1,4 +1,4 @@
-package tools.gnzlz.template.Template;
+package tools.gnzlz.template.template;
 
 import tools.gnzlz.template.instruction.*;
 import tools.gnzlz.template.instruction.base.InstructionMultiple;

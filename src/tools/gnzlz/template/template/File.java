@@ -1,4 +1,4 @@
-package tools.gnzlz.template.Template;
+package tools.gnzlz.template.template;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -41,7 +41,7 @@ public class File {
                 stringBuilder.append(line).append(System.lineSeparator());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(url + " fail load file");
         }
         return stringBuilder.toString();
     }
@@ -75,7 +75,7 @@ public class File {
                 return true;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(url + " fail create file");
         }
         return false;
     }

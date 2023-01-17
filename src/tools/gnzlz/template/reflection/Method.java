@@ -29,6 +29,16 @@ public class Method {
     }
 
     /**********************************
+     * reflection
+     **********************************/
+
+    public static Object reflection(Object object, String level){
+
+
+        return "";
+    }
+
+    /**********************************
      * isMethod
      **********************************/
 
