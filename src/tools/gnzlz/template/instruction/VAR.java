@@ -1,21 +1,29 @@
 package tools.gnzlz.template.instruction;
 
-import tools.gnzlz.template.template.Template;
 import tools.gnzlz.template.instruction.base.InstructionSimple;
 import tools.gnzlz.template.instruction.base.Utils;
+import tools.gnzlz.template.template.Template;
 import tools.gnzlz.template.reflection.Field;
+import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
 
 public class VAR extends InstructionSimple {
 
     /**
-     * constructor
+     * VAR
+     * @param start s
+     * @param end e
      */
     public VAR(int start, int end) {
         super(Type.VAR, start, end);
     }
 
+    /**
+     * execute
+     * @param content c
+     * @param template t
+     */
     @Override
-    public Object execute(String content, Template template) {
+    public Object execute(String content, Template template) throws TemplateObjectNotFoundException {
         /**
          * vars
          */

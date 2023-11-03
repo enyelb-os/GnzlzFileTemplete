@@ -1,22 +1,30 @@
 package tools.gnzlz.template.instruction;
 
-import tools.gnzlz.template.template.Template;
 import tools.gnzlz.template.instruction.base.InstructionMultiple;
+import tools.gnzlz.template.template.Template;
 import tools.gnzlz.template.instruction.base.InstructionSimple;
 import tools.gnzlz.template.instruction.base.Utils;
 import tools.gnzlz.template.reflection.Field;
+import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
 
 public class FOR extends InstructionMultiple {
 
     /**
-     * constructor
+     * FOR
+     * @param start s
+     * @param end e
      */
     public FOR(int start, int end) {
         super(Type.FOR, start, end);
     }
 
+    /**
+     * execute
+     * @param content c
+     * @param template t
+     */
     @Override
-    public String execute(String content, Template template) {
+    public String execute(String content, Template template) throws TemplateObjectNotFoundException {
         /**
          * get arguments to "FOR"
          */

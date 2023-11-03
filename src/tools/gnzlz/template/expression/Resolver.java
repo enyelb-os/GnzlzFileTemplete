@@ -4,10 +4,10 @@ import java.util.Stack;
 
 public class Resolver {
 
-    /**********************************
-     * resolve
-     **********************************/
-
+    /**
+     * number
+     * @param expression e
+     */
     public static Object number(Object expression){
         Number resolve = new Number();
         Stack<Number> resolves = new Stack<Number>();

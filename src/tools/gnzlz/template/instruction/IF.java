@@ -1,10 +1,11 @@
 package tools.gnzlz.template.instruction;
 
-import tools.gnzlz.template.template.Template;
-import tools.gnzlz.template.expression.Resolver;
 import tools.gnzlz.template.instruction.base.InstructionMultiple;
 import tools.gnzlz.template.instruction.base.InstructionSimple;
 import tools.gnzlz.template.instruction.base.Utils;
+import tools.gnzlz.template.template.Template;
+import tools.gnzlz.template.expression.Resolver;
+import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -12,28 +13,59 @@ import java.util.regex.Pattern;
 
 public class IF extends InstructionMultiple {
 
+    /**
+     * IF
+     * @param start s
+     * @param end e
+     */
     public static IF IF(int start, int end) {
         return new IF(Type.IF, start, end);
     }
 
+    /**
+     * ELSEIF
+     * @param start s
+     * @param end e
+     */
     public static IF ELSEIF(int start, int end) {
         return new IF(Type.ELSEIF, start, end);
     }
 
+    /**
+     * ELSE
+     * @param start s
+     * @param end e
+     */
     public static IF ELSE(int start, int end) {
         return new IF(Type.ELSE, start, end);
     }
 
+    /**
+     * IF
+     * @param start s
+     * @param end e
+     */
     public IF(int start, int end) {
         this(Type.IF, start, end);
     }
 
+    /**
+     * IF
+     * @param type t
+     * @param start s
+     * @param end e
+     */
     private IF(Type type, int start, int end) {
         super(type, start, end);
     }
 
+    /**
+     * execute
+     * @param content c
+     * @param template t
+     */
     @Override
-    public Object execute(String content, Template template) {
+    public Object execute(String content, Template template) throws TemplateObjectNotFoundException {
         String contentif = content.substring(start + start(template), end);
         boolean results[] = prepareData(contentif, content, template);
         if(type == Type.ELSE || validateResults(results, contentif)){
@@ -68,11 +100,13 @@ public class IF extends InstructionMultiple {
         return "";
     }
 
-    /**********************************
-     * PrepareData
-     **********************************/
-
-    private boolean[] prepareData(String contentif, String content, Template template){
+    /**
+     * prepareData
+     * @param contentif c
+     * @param content c
+     * @param template t
+     */
+    private boolean[] prepareData(String contentif, String content, Template template) throws TemplateObjectNotFoundException {
         String split[] = contentif.split("(AND|OR)");
         boolean results[] = new boolean[split.length];
         int var = 0;
@@ -109,10 +143,10 @@ public class IF extends InstructionMultiple {
         return results;
     }
 
-    /**********************************
-     * Operator
-     **********************************/
-
+    /**
+     * operator
+     * @param value v
+     */
     private String operator(String value){
         if(value.contains("!=")){
             return "!=";
@@ -129,10 +163,12 @@ public class IF extends InstructionMultiple {
         }
     }
 
-    /**********************************
-     * Result
-     **********************************/
-
+    /**
+     * result
+     * @param value1 v
+     * @param value2 v
+     * @param operator o
+     */
     private boolean result(Object value1, Object value2, String operator){
         if(operator.equals("!=")){
             if(value1 instanceof Number || value2 instanceof Number || value1 instanceof String || value2 instanceof String){
@@ -173,10 +209,11 @@ public class IF extends InstructionMultiple {
         }
     }
 
-    /**********************************
-     * Validate Results
-     **********************************/
-
+    /**
+     * validateResults
+     * @param results r
+     * @param expression e
+     */
     private boolean validateResults(boolean results[], String expression){
         Pattern pattern = Pattern.compile("(AND|OR)");
         Matcher matcher = pattern.matcher(expression);

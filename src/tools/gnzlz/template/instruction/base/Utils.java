@@ -6,10 +6,11 @@ import java.util.regex.MatchResult;
 
 public class Utils {
 
-    /**********************************
-     * endInstruction
-     **********************************/
-
+    /**
+     * end
+     * @param instruction i
+     * @param template t
+     */
     public static int end(InstructionSimple instruction, Template template) {
         if (instruction instanceof InstructionMultiple) {
             return ((InstructionMultiple) instruction).end().end;
@@ -18,10 +19,12 @@ public class Utils {
         }
     }
 
-    /**********************************
-     * endInstruction
-     **********************************/
-
+    /**
+     * positionEndCharacterValid
+     * @param content c
+     * @param startPos s
+     * @param endPos e
+     */
     public static int positionEndCharacterValid(String content, int startPos, int endPos) {
         int k = endPos - 1;
         while (k != startPos){
@@ -37,6 +40,12 @@ public class Utils {
         return k+1;
     }
 
+    /**
+     * positionEndCharacterValid
+     * @param content c
+     * @param instruction i
+     * @param i i
+     */
     public static int positionEndCharacterValid(String content,InstructionSimple instruction, int i){
         if(instruction instanceof InstructionMultiple){
             return Utils.positionStartCharacterValid(content, i, instruction.start);
@@ -44,6 +53,12 @@ public class Utils {
         return instruction.start;
     }
 
+    /**
+     * positionStartCharacterValid
+     * @param content c
+     * @param startPos s
+     * @param endPos e
+     */
     public static int positionStartCharacterValid(String content, int startPos, int endPos) {
         int k = startPos;
         while (k != endPos){
@@ -58,6 +73,13 @@ public class Utils {
         }
         return k;
     }
+
+    /**
+     * containsCharacterValid
+     * @param content c
+     * @param startPos s
+     * @param endPos e
+     */
     public static boolean containsCharacterValid(String content, int startPos, int endPos) {
         int k = startPos;
         while (k != endPos){
@@ -70,14 +92,22 @@ public class Utils {
         return false;
     }
 
-    /**********************************
-     * endInstruction
-     **********************************/
-
+    /**
+     * valid
+     * @param template c
+     * @param match s
+     * @param type e
+     */
     public static boolean valid(Template template, MatchResult match, String type) {
         return match.group().equals(template.symbol() + type + template.symbolStart());
     }
 
+    /**
+     * valid2
+     * @param template c
+     * @param match s
+     * @param type e
+     */
     public static boolean valid2(Template template, MatchResult match, String type) {
         return match.group().equals(template.symbol() + type);
     }

@@ -1,16 +1,21 @@
 package tools.gnzlz.template.reflection;
 
 
+import tools.gnzlz.template.reflection.functional.FunctionObjectCustom;
+import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 
 public class Field {
 
-    /**********************************
-     * Reflection
-     **********************************/
-
-    public static Object reflection(Hashtable<String, Object> data, String content, Object ... objects){
+    /**
+     * reflection
+     * @param data d
+     * @param content c
+     * @param objects o
+     */
+    public static Object reflection(Hashtable<String, Object> data, String content, Object ... objects) throws TemplateObjectNotFoundException{
         Object object = null;
         String levels[] = content.split("[.]");
         int k = 0;
@@ -28,9 +33,9 @@ public class Field {
             if(i == 0){
                 object = data.get(levels[i]);
                 if(object == null){
-                    throw new RuntimeException(levels[i] + " is null");
+                    throw new TemplateObjectNotFoundException(levels[i] + " is null");
                 }
-            } else if(Method.isMathod(levels[i])){
+            } else if(Method.isMethod(levels[i])){
                 object = Method.reflection(object, levels[i], objects);
             } else {
                 object = Field.reflection(object, levels[i], data, content);
@@ -39,11 +44,14 @@ public class Field {
         return object;
     }
 
-    /**********************************
-     * Reflection
-     **********************************/
-
-    private static Object reflection(Object object, String name, Hashtable<String, Object> data, String name_complete){
+    /**
+     * reflection
+     * @param object o
+     * @param name n
+     * @param data d
+     * @param name_complete n
+     */
+    private static Object reflection(Object object, String name, Hashtable<String, Object> data, String name_complete) throws TemplateObjectNotFoundException{
         Class<?> c = object instanceof Class ? ((Class)object) : object.getClass();
         Object current = object;
         try {
@@ -58,10 +66,10 @@ public class Field {
             } catch (IllegalAccessException | InvocationTargetException ex) {}
 
             Object objectCustom = data.get(name);
-            if(objectCustom != null && objectCustom instanceof ObjectCustom){
-                return ((ObjectCustom) objectCustom).run(current);
+            if(objectCustom != null && objectCustom instanceof FunctionObjectCustom){
+                return ((FunctionObjectCustom) objectCustom).run(current);
             } else {
-                throw new RuntimeException(name_complete + " is null [" + name + "]");
+                throw new TemplateObjectNotFoundException(name_complete + " is null [" + name + "]");
             }
 
         }
