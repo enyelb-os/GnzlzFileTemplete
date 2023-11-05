@@ -1,6 +1,6 @@
-package tools.gnzlz.template.reflection;
+package tools.gnzlz.template.instruction.reflection;
 
-import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
+import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
 
 import java.lang.reflect.InvocationTargetException;
 

@@ -2,7 +2,7 @@ package tools.gnzlz.template.instruction.base;
 
 import tools.gnzlz.template.instruction.Type;
 import tools.gnzlz.template.template.Template;
-import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
+import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
 
 import java.util.ArrayList;
 

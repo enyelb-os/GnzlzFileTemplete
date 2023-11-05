@@ -1,4 +1,4 @@
-package tools.gnzlz.template.expression;
+package tools.gnzlz.template.instruction.expression;
 
 import java.util.Stack;
 

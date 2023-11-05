@@ -1,4 +1,4 @@
-package tools.gnzlz.template.template.type.data;
+package tools.gnzlz.template.template.loader.data;
 
 import tools.gnzlz.template.template.Template;
 

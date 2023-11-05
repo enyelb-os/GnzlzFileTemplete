@@ -1,4 +1,4 @@
-package tools.gnzlz.template.reflection.functional;
+package tools.gnzlz.template.instruction.reflection.functional;
 
 @FunctionalInterface
 public interface FunctionObjectCustom {

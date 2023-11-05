@@ -1,8 +1,8 @@
-package tools.gnzlz.template.template.type;
+package tools.gnzlz.template.template;
 
 import java.util.ArrayList;
 
-public class TemplatesManager {
+public class TemplateManager {
 
     /**
      * out
@@ -22,32 +22,32 @@ public class TemplatesManager {
     /**
      * templates
      */
-    protected ArrayList<TemplatesBase> templates;
+    protected ArrayList<TemplateLoader> templates;
 
     /**
-     * TemplatesManager
+     * TemplateManager
      * @param path p
      * @param out o
      */
-    protected TemplatesManager(String path, String out){
-        templates = new ArrayList<TemplatesBase>();
+    protected TemplateManager(String path, String out){
+        templates = new ArrayList<TemplateLoader>();
         this.path = path;
         this.out = out;
         this.internal = false;
     }
 
     /**
-     * TemplatesManager
+     * TemplateManager
      * @param path p
      */
-    protected TemplatesManager(String path){
+    protected TemplateManager(String path){
        this(path, "");
     }
 
     /**
-     * TemplatesManager
+     * TemplateManager
      */
-    protected TemplatesManager(){
+    protected TemplateManager(){
         this("", "");
 
     }
@@ -55,16 +55,16 @@ public class TemplatesManager {
     /**
      * create
      */
-    public static TemplatesManager create(){
-        return new TemplatesManager();
+    public static TemplateManager create(){
+        return new TemplateManager();
     }
 
     /**
      * create
      * @param path p
      */
-    public static TemplatesManager create(String path){
-        return new TemplatesManager(path);
+    public static TemplateManager create(String path){
+        return new TemplateManager(path);
     }
 
     /**
@@ -72,8 +72,8 @@ public class TemplatesManager {
      * @param path p
      * @param out o
      */
-    public static TemplatesManager create(String path, String out){
-        return new TemplatesManager(path, out);
+    public static TemplateManager create(String path, String out){
+        return new TemplateManager(path, out);
     }
 
     /**
@@ -81,7 +81,7 @@ public class TemplatesManager {
      * @param template name
      * @param addPathAndOut a
      */
-    public TemplatesManager add(boolean addPathAndOut, TemplatesBase template){
+    public TemplateManager add(boolean addPathAndOut, TemplateLoader template){
         if (addPathAndOut) {
             if (template.path.isEmpty() && !path.isEmpty()) {
                 template.path = path;
@@ -99,7 +99,7 @@ public class TemplatesManager {
      * add
      * @param template name
      */
-    public TemplatesManager add(TemplatesBase template){
+    public TemplateManager add(TemplateLoader template){
         this.add(true, template);
         return this;
     }
@@ -108,7 +108,7 @@ public class TemplatesManager {
      * internal
      * @param internal internal
      */
-    public TemplatesManager internal(boolean internal){
+    public TemplateManager internal(boolean internal){
         this.internal = internal;
         return this;
     }
@@ -117,7 +117,7 @@ public class TemplatesManager {
      * path
      * @param path path
      */
-    public TemplatesManager path(String path){
+    public TemplateManager path(String path){
         this.path = path;
         return this;
     }
@@ -126,7 +126,7 @@ public class TemplatesManager {
      * out
      * @param out out
      */
-    public TemplatesManager out(String out){
+    public TemplateManager out(String out){
         this.out = out;
         return this;
     }
@@ -134,14 +134,14 @@ public class TemplatesManager {
     /**
      * templates
      */
-    public ArrayList<TemplatesBase> templates(){
+    public ArrayList<TemplateLoader> templates(){
         return templates;
     }
 
     /**
      * test
      */
-    public TemplatesManager test(){
+    public TemplateManager test(){
         templates.forEach(templates->{
             templates.templates();
         });

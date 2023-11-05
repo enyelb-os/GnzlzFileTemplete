@@ -3,8 +3,8 @@ package tools.gnzlz.template.instruction;
 import tools.gnzlz.template.instruction.base.InstructionSimple;
 import tools.gnzlz.template.instruction.base.Utils;
 import tools.gnzlz.template.template.Template;
-import tools.gnzlz.template.reflection.Field;
-import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
+import tools.gnzlz.template.instruction.reflection.Field;
+import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
 
 public class VAR extends InstructionSimple {
 

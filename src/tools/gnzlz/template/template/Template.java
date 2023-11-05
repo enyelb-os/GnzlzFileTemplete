@@ -4,8 +4,8 @@ import tools.gnzlz.template.instruction.*;
 import tools.gnzlz.template.instruction.base.InstructionMultiple;
 import tools.gnzlz.template.instruction.base.InstructionSimple;
 import tools.gnzlz.template.instruction.base.Utils;
-import tools.gnzlz.template.reflection.functional.FunctionObjectCustom;
-import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
+import tools.gnzlz.template.instruction.reflection.functional.FunctionObjectCustom;
+import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Hashtable;

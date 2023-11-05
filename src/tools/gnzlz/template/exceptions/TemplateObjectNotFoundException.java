@@ -1,4 +1,4 @@
-package tools.gnzlz.template.template.exceptions;
+package tools.gnzlz.template.exceptions;
 
 public class TemplateObjectNotFoundException extends Exception {
 

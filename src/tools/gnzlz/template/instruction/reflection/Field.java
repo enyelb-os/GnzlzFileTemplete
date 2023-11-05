@@ -1,8 +1,8 @@
-package tools.gnzlz.template.reflection;
+package tools.gnzlz.template.instruction.reflection;
 
 
-import tools.gnzlz.template.reflection.functional.FunctionObjectCustom;
-import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
+import tools.gnzlz.template.instruction.reflection.functional.FunctionObjectCustom;
+import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;

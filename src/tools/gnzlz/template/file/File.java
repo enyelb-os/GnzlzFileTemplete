@@ -1,6 +1,6 @@
-package tools.gnzlz.template.template.file;
+package tools.gnzlz.template.file;
 
-import tools.gnzlz.template.template.file.data.ObjectFile;
+import tools.gnzlz.template.file.data.ObjectFile;
 
 import java.io.*;
 import java.nio.file.Files;

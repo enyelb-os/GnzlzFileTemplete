@@ -1,4 +1,4 @@
-package tools.gnzlz.template.template.type.functional;
+package tools.gnzlz.template.template.loader.functional;
 
 import tools.gnzlz.template.template.Template;
 

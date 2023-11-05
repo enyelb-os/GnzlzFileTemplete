@@ -1,20 +1,17 @@
-package tools.gnzlz.template.template.type;
+package tools.gnzlz.template.template;
 
-import tools.gnzlz.template.template.Template;
-import tools.gnzlz.template.template.exceptions.TemplateObjectNotFoundException;
-import tools.gnzlz.template.template.file.File;
-import tools.gnzlz.template.template.file.data.ObjectFile;
-import tools.gnzlz.template.template.type.data.ObjectDataLoad;
-import tools.gnzlz.template.template.type.data.ObjectFileLoad;
-import tools.gnzlz.template.template.type.data.ObjectFunctionAddObjects;
-import tools.gnzlz.template.template.type.data.ObjectTemplate;
-import tools.gnzlz.template.template.type.functional.FunctionAddObjects;
-import tools.gnzlz.template.template.type.util.DefaultObjects;
-import tools.gnzlz.template.template.type.util.FileController;
+import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
+import tools.gnzlz.template.template.loader.data.ObjectDataLoad;
+import tools.gnzlz.template.template.loader.data.ObjectFileLoad;
+import tools.gnzlz.template.template.loader.data.ObjectFunctionAddObjects;
+import tools.gnzlz.template.template.loader.data.ObjectTemplate;
+import tools.gnzlz.template.template.loader.functional.FunctionAddObjects;
+import tools.gnzlz.template.template.loader.util.DefaultObjects;
+import tools.gnzlz.template.template.loader.controller.FileController;
 
 import java.util.ArrayList;
 
-public class TemplatesBase<T extends TemplatesBase<?>> {
+public class TemplateLoader<T extends TemplateLoader<?>> {
 
     /**
      * out
@@ -52,11 +49,11 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
     private ArrayList<ObjectDataLoad> objects;
 
     /**
-     * TemplatesBase
+     * TemplateLoader
      * @param path p
      * @param out o
      */
-    protected TemplatesBase(String path, String out){
+    protected TemplateLoader(String path, String out){
         this.templates = new ArrayList<ObjectTemplate>();
         this.functionsAddObjects = new ArrayList<ObjectFunctionAddObjects<Object>>();
         this.files = new ArrayList<ObjectFileLoad>();
@@ -66,33 +63,33 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
     }
 
     /**
-     * TemplatesBase
+     * TemplateLoader
      * @param path p
      */
-    protected TemplatesBase(String path){
+    protected TemplateLoader(String path){
        this(path, "");
     }
 
     /**
-     * TemplatesBase
+     * TemplateLoader
      */
-    protected TemplatesBase(){
+    protected TemplateLoader(){
         this("", "");
     }
 
     /**
      * create
      */
-    public static TemplatesBase create(){
-        return new TemplatesBase();
+    public static TemplateLoader create(){
+        return new TemplateLoader();
     }
 
     /**
      * create
      * @param path p
      */
-    public static TemplatesBase create(String path){
-        return new TemplatesBase(path);
+    public static TemplateLoader create(String path){
+        return new TemplateLoader(path);
     }
 
     /**
@@ -100,8 +97,8 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
      * @param path p
      * @param out o
      */
-    public static TemplatesBase create(String path, String out){
-        return new TemplatesBase(path, out);
+    public static TemplateLoader create(String path, String out){
+        return new TemplateLoader(path, out);
     }
 
     /**
@@ -112,27 +109,6 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
      */
     public <Type> T objects(Class<Type> type, FunctionAddObjects<Type> functionAddObjects) {
         functionsAddObjects.add((ObjectFunctionAddObjects<Object>) new ObjectFunctionAddObjects<Type>(functionAddObjects, type));
-        return (T) this;
-    }
-
-    /**
-     * objects
-     * @param name name
-     * @param object o
-     */
-    public T object(String name, Object object) {
-        objects.add(new ObjectDataLoad("", name, object));
-        return (T) this;
-    }
-
-    /**
-     * objects
-     * @param templates t
-     * @param name name
-     * @param object o
-     */
-    public T objectTemplate(String templates, String name, Object object) {
-        objects.add(new ObjectDataLoad(templates, name, object));
         return (T) this;
     }
 
@@ -156,6 +132,27 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
     }
 
     /**
+     * object
+     * @param name name
+     * @param object o
+     */
+    public T object(String name, Object object) {
+        objects.add(new ObjectDataLoad("", name, object));
+        return (T) this;
+    }
+
+    /**
+     * objects
+     * @param templates t
+     * @param name name
+     * @param object o
+     */
+    public T objectTemplate(String templates, String name, Object object) {
+        objects.add(new ObjectDataLoad(templates, name, object));
+        return (T) this;
+    }
+
+    /**
      * objects
      * @param names names
      * @param objects o
@@ -165,7 +162,7 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
             process(objects);
         } else {
             for (ObjectTemplate o: templates()) {
-                if (FileController.existsFileName(names, o.name())) {
+                if (FileController.containsKey(names, o.name())) {
                     try {
                         objects(objects);
                         FileController.create(out, o.template());
@@ -184,7 +181,6 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
      * @param objects o
      */
     public T process(Object ... objects) {
-
         for (ObjectTemplate o: templates()) {
             try {
                 objects(objects);
@@ -198,13 +194,41 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
     }
 
     /**
+     * existsUrlTemplates
+     * @param url url
+     */
+    private boolean existsUrlTemplates(String url){
+        for (ObjectTemplate template: templates) {
+            if (template.url().equals(url)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * existsUrl
+     * @param url url
+     */
+    private boolean existsUrlFiles(String url){
+        for (ObjectFileLoad file: files) {
+            if (file.url().equals(url)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * load
      * @param name name
      * @param url url
      * @param internal internal
      */
     public T load(String name, String url, boolean internal) {
-        this.files.add(new ObjectFileLoad(name, url, internal));
+        if (!existsUrlFiles(url)) {
+            files.add(new ObjectFileLoad(name, url, internal));
+        }
         return (T) this;
     }
 
@@ -214,8 +238,25 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
      * @param url url
      */
     public T load(String name, String url) {
-        this.load(name, url, false);
+        load(name, url, false);
         return (T) this;
+    }
+
+    /**
+     * template
+     * @param template template
+     */
+    protected TemplateLoader template(ObjectTemplate template) {
+        if (template != null && !existsUrlTemplates(template.url())) {
+            defaultObjects(template.template());
+            for (ObjectDataLoad data: objects) {
+                if (FileController.containsKey(data.templates(), template.name())) {
+                    template.template().object(data.name(), data.value());
+                }
+            }
+            templates.add(template);
+        }
+        return this;
     }
 
     /**
@@ -224,7 +265,8 @@ public class TemplatesBase<T extends TemplatesBase<?>> {
     public ArrayList<ObjectTemplate> templates() {
         if (!files.isEmpty()) {
             for (ObjectFileLoad file : files) {
-                FileController.load(file.name(), path, file.url(), file.internal() ? true : internal, templates, objects, this::defaultObjects);
+                ObjectTemplate template = FileController.load(file.name(), path, file.url(), file.internal() ? true : internal);
+                template(template);
             }
             files.clear();
         }
