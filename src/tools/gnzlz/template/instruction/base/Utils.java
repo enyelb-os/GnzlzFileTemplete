@@ -1,6 +1,6 @@
 package tools.gnzlz.template.instruction.base;
 
-import tools.gnzlz.template.template.Template;
+import tools.gnzlz.template.Template;
 
 import java.util.regex.MatchResult;
 

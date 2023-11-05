@@ -40,6 +40,7 @@ public class File {
         String line;
         try {
             InputStream is = internal ? getClass().getResourceAsStream(url) : new FileInputStream(new java.io.File(url));
+            assert is != null;
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             while ((line = br.readLine()) != null) {
                 stringBuilder.append(line).append(System.lineSeparator());

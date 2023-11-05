@@ -1,10 +1,10 @@
-package tools.gnzlz.template.template.loader.controller;
+package tools.gnzlz.template.loader.controller;
 
-import tools.gnzlz.template.template.Template;
+import tools.gnzlz.template.Template;
 import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
 import tools.gnzlz.template.file.File;
 import tools.gnzlz.template.file.data.ObjectFile;
-import tools.gnzlz.template.template.loader.data.ObjectTemplate;
+import tools.gnzlz.template.loader.data.ObjectTemplate;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;

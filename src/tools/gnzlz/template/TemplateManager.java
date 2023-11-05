@@ -1,4 +1,4 @@
-package tools.gnzlz.template.template;
+package tools.gnzlz.template;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class TemplateManager {
     /**
      * templates
      */
-    protected ArrayList<TemplateLoader> templates;
+    protected ArrayList<TemplateLoader<?>> templates;
 
     /**
      * TemplateManager
@@ -30,7 +30,7 @@ public class TemplateManager {
      * @param out o
      */
     protected TemplateManager(String path, String out){
-        templates = new ArrayList<TemplateLoader>();
+        templates = new ArrayList<TemplateLoader<?>>();
         this.path = path;
         this.out = out;
         this.internal = false;
@@ -134,7 +134,7 @@ public class TemplateManager {
     /**
      * templates
      */
-    public ArrayList<TemplateLoader> templates(){
+    public ArrayList<TemplateLoader<?>> templates(){
         return templates;
     }
 
@@ -142,9 +142,7 @@ public class TemplateManager {
      * test
      */
     public TemplateManager test(){
-        templates.forEach(templates->{
-            templates.templates();
-        });
+        templates.forEach(TemplateLoader::templates);
         return this;
     }
 }

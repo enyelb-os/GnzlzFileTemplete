@@ -1,6 +1,6 @@
-package tools.gnzlz.template.template.loader.util;
+package tools.gnzlz.template.loader.util;
 
-import tools.gnzlz.template.template.Template;
+import tools.gnzlz.template.Template;
 
 import java.util.ArrayList;
 

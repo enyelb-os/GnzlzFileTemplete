@@ -1,13 +1,13 @@
-package tools.gnzlz.template.template;
+package tools.gnzlz.template;
 
 import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
-import tools.gnzlz.template.template.loader.data.ObjectDataLoad;
-import tools.gnzlz.template.template.loader.data.ObjectFileLoad;
-import tools.gnzlz.template.template.loader.data.ObjectFunctionAddObjects;
-import tools.gnzlz.template.template.loader.data.ObjectTemplate;
-import tools.gnzlz.template.template.loader.functional.FunctionAddObjects;
-import tools.gnzlz.template.template.loader.util.DefaultObjects;
-import tools.gnzlz.template.template.loader.controller.FileController;
+import tools.gnzlz.template.loader.data.ObjectDataLoad;
+import tools.gnzlz.template.loader.data.ObjectFileLoad;
+import tools.gnzlz.template.loader.data.ObjectFunctionAddObjects;
+import tools.gnzlz.template.loader.data.ObjectTemplate;
+import tools.gnzlz.template.loader.functional.FunctionAddObjects;
+import tools.gnzlz.template.loader.util.DefaultObjects;
+import tools.gnzlz.template.loader.controller.FileController;
 
 import java.util.ArrayList;
 

@@ -3,7 +3,7 @@ package tools.gnzlz.template.instruction;
 import tools.gnzlz.template.instruction.base.InstructionMultiple;
 import tools.gnzlz.template.instruction.base.InstructionSimple;
 import tools.gnzlz.template.instruction.base.Utils;
-import tools.gnzlz.template.template.Template;
+import tools.gnzlz.template.Template;
 import tools.gnzlz.template.instruction.expression.Resolver;
 import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
 

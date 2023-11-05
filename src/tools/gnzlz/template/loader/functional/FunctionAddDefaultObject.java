@@ -1,6 +1,6 @@
-package tools.gnzlz.template.template.loader.functional;
+package tools.gnzlz.template.loader.functional;
 
-import tools.gnzlz.template.template.Template;
+import tools.gnzlz.template.Template;
 
 @FunctionalInterface
 public interface FunctionAddDefaultObject<Type> {
