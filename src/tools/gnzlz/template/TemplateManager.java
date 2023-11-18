@@ -30,7 +30,7 @@ public class TemplateManager {
      * @param out o
      */
     protected TemplateManager(String path, String out){
-        templates = new ArrayList<TemplateLoader<?>>();
+        templates = new ArrayList<>();
         this.path = path;
         this.out = out;
         this.internal = false;
@@ -81,7 +81,7 @@ public class TemplateManager {
      * @param template name
      * @param addPathAndOut a
      */
-    public TemplateManager add(boolean addPathAndOut, TemplateLoader template){
+    public TemplateManager add(boolean addPathAndOut, TemplateLoader<?> template){
         if (addPathAndOut) {
             if (template.path.isEmpty() && !path.isEmpty()) {
                 template.path = path;
@@ -99,7 +99,7 @@ public class TemplateManager {
      * add
      * @param template name
      */
-    public TemplateManager add(TemplateLoader template){
+    public TemplateManager add(TemplateLoader<?> template){
         this.add(true, template);
         return this;
     }

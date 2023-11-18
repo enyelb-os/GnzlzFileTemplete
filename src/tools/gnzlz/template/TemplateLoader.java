@@ -31,22 +31,22 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
     /**
      * templates
      */
-    private ArrayList<ObjectTemplate> templates;
+    private final ArrayList<ObjectTemplate> templates;
 
     /**
      * functionsAddObjects
      */
-    private ArrayList<ObjectFunctionAddObjects<Object>> functionsAddObjects;
+    private final ArrayList<ObjectFunctionAddObjects<Object>> functionsAddObjects;
 
     /**
      * files
      */
-    private ArrayList<ObjectFileLoad> files;
+    private final ArrayList<ObjectFileLoad> files;
 
     /**
      * objects
      */
-    private ArrayList<ObjectDataLoad> objects;
+    private final ArrayList<ObjectDataLoad> objects;
 
     /**
      * TemplateLoader
@@ -54,10 +54,10 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * @param out o
      */
     protected TemplateLoader(String path, String out){
-        this.templates = new ArrayList<ObjectTemplate>();
-        this.functionsAddObjects = new ArrayList<ObjectFunctionAddObjects<Object>>();
-        this.files = new ArrayList<ObjectFileLoad>();
-        this.objects = new ArrayList<ObjectDataLoad>();
+        this.templates = new ArrayList<>();
+        this.functionsAddObjects = new ArrayList<>();
+        this.files = new ArrayList<>();
+        this.objects = new ArrayList<>();
         this.path = path;
         this.out = out;
     }
@@ -80,16 +80,16 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
     /**
      * create
      */
-    public static TemplateLoader create(){
-        return new TemplateLoader();
+    public static TemplateLoader<?> create(){
+        return new TemplateLoader<>();
     }
 
     /**
      * create
      * @param path p
      */
-    public static TemplateLoader create(String path){
-        return new TemplateLoader(path);
+    public static TemplateLoader<?> create(String path){
+        return new TemplateLoader<>(path);
     }
 
     /**
@@ -97,8 +97,8 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * @param path p
      * @param out o
      */
-    public static TemplateLoader create(String path, String out){
-        return new TemplateLoader(path, out);
+    public static TemplateLoader<?> create(String path, String out){
+        return new TemplateLoader<>(path, out);
     }
 
     /**
@@ -108,7 +108,7 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * @param functionAddObjects t
      */
     public <Type> T objects(Class<Type> type, FunctionAddObjects<Type> functionAddObjects) {
-        functionsAddObjects.add((ObjectFunctionAddObjects<Object>) new ObjectFunctionAddObjects<Type>(functionAddObjects, type));
+        functionsAddObjects.add((ObjectFunctionAddObjects<Object>) new ObjectFunctionAddObjects<>(functionAddObjects, type));
         return (T) this;
     }
 
@@ -238,15 +238,14 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * @param url url
      */
     public T load(String name, String url) {
-        load(name, url, false);
-        return (T) this;
+        return load(name, url, false);
     }
 
     /**
      * template
      * @param template template
      */
-    protected TemplateLoader template(ObjectTemplate template) {
+    protected TemplateLoader<?> template(ObjectTemplate template) {
         if (template != null && !existsUrlTemplates(template.url())) {
             defaultObjects(template.template());
             for (ObjectDataLoad data: objects) {
@@ -265,7 +264,7 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
     public ArrayList<ObjectTemplate> templates() {
         if (!files.isEmpty()) {
             for (ObjectFileLoad file : files) {
-                ObjectTemplate template = FileController.load(file.name(), path, file.url(), file.internal() ? true : internal);
+                ObjectTemplate template = FileController.load(file.name(), path, file.url(), file.internal() || internal);
                 template(template);
             }
             files.clear();
