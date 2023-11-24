@@ -1,6 +1,7 @@
 package tools.gnzlz.template.loader.util;
 
 import tools.gnzlz.template.Template;
+import tools.gnzlz.template.instruction.reflection.functional.FunctionObjectCustom;
 
 import java.util.ArrayList;
 
@@ -11,44 +12,29 @@ public class DefaultObjects {
      * @param template t
      */
     public static void objectDefault(Template template){
-        template.object("camelcase", o -> beginValidNumber(camelCaseClass(o.toString())));
-        template.object("lowercamelcase", o -> beginValidNumber(camelCaseMethod(o.toString())));
-        template.object("uppercase", o -> beginValidNumber(o.toString()).toUpperCase());
-        template.object("lowercase", o -> beginValidNumber(o.toString()).toLowerCase());
 
-        template.object("classname", o -> {
-            if(o instanceof Class) {
-                return ((Class<?>)o).getSimpleName();
-            }else if(o instanceof Object){
-                return o.getClass().getSimpleName();
-            }
-            return "";
-        });
+        FunctionObjectCustom camelCase = o -> o != null && !o.toString().isEmpty() ? camelCase(o.toString()) : "";
+        FunctionObjectCustom pascalCase = o -> o != null && !o.toString().isEmpty() ? pascalCase(o.toString()) : "";
+        FunctionObjectCustom upperCase = o -> o.toString().toUpperCase();
+        FunctionObjectCustom lowerCase = o -> o.toString().toLowerCase();
+        FunctionObjectCustom className = o -> o instanceof Class c ? c.getSimpleName() : (o != null ? o.getClass().getSimpleName() : "");
+        FunctionObjectCustom packageName = o -> o instanceof Class c ? c.getPackage().getName() : (o != null ? o.getClass().getPackage().getName() : "");
+        FunctionObjectCustom pathName = o -> o instanceof String s ? s.replaceAll("[.]", "/") : o;
 
-        template.object("package", o -> {
-            if(o instanceof Class) {
-                return ((Class<?>)o).getPackage().getName();
-            }else if(o instanceof Object){
-                return o.getClass().getPackage().getName();
-            }
-            return "";
-        });
+        template.object("empty", o -> o instanceof String s ? s.isEmpty() : (o instanceof ArrayList<?> a ? a.isEmpty() : true));
+        template.object("path", pathName);
+        template.object("camelcase", camelCase);
+        template.object("pascalcase", pascalCase);
+        template.object("uppercase", upperCase);
+        template.object("lowercase", lowerCase);
+        template.object("classname", className);
+        template.object("cc", camelCase);
+        template.object("pc", pascalCase);
+        template.object("uc", upperCase);
+        template.object("lc", lowerCase);
+        template.object("cn", className);
+        template.object("package", packageName);
 
-        template.object("empty", o -> {
-            if(o instanceof String) {
-                return ((String) o).isEmpty();
-            } else if(o instanceof ArrayList){
-                return ((ArrayList) o).isEmpty();
-            }
-            return true;
-        });
-
-        template.object("path", o -> {
-            if (o instanceof String) {
-                return ((String) o).replaceAll("[.]", "/");
-            }
-            return o;
-        });
     }
 
     /**
@@ -76,45 +62,45 @@ public class DefaultObjects {
     }
 
     /**
-     * camelCaseClass
+     * pascalCase
      * @param s s
      */
-    private static String camelCaseClass(String s) {
+    private static String pascalCase(String s) {
         s = s.toLowerCase();
-        String temp[] = s.split("_");
-        String newString = "";
+        String[] temp = s.split("_");
+        StringBuilder newString = new StringBuilder();
         for (String string : temp) {
-            newString = newString + Character.toUpperCase(string.charAt(0)) + string.substring(1);
+            newString.append(Character.toUpperCase(string.charAt(0))).append(string.substring(1));
         }
 
         if(s.substring(s.length()-1).equalsIgnoreCase("_")){
-            newString = newString + "_";
+            newString.append("_");
         }
 
-        return newString;
+        return newString.toString();
     }
 
     /**
-     * camelCaseMethod
+     * camelCase
      * @param s s
      */
-    private static String camelCaseMethod(String s) {
+    private static String camelCase(String s) {
         s = s.toLowerCase();
-        String temp[] = s.split("_");
-        String newString = "";
+        String[] temp = s.split("_");
+        StringBuilder newString = new StringBuilder();
         for (int i = 0; i < temp.length; i++) {
             if(i==0){
-                newString = newString + Character.toLowerCase(temp[i].charAt(0)) + temp[i].substring(1);
+                newString.append(Character.toLowerCase(temp[i].charAt(0))).append(temp[i].substring(1));
             } else {
-                newString = newString + Character.toUpperCase(temp[i].charAt(0)) + temp[i].substring(1);
+                newString.append(Character.toUpperCase(temp[i].charAt(0))).append(temp[i].substring(1));
             }
         }
 
         if(s.substring(s.length()-1).equalsIgnoreCase("_")){
-            newString = newString + "_";
+            newString.append("_");
         }
 
-        return newString;
+        return newString.toString();
     }
 
 }
