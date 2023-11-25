@@ -118,8 +118,8 @@ public class IF extends InstructionMultiple {
                     InstructionSimple instruction = arguments.get(var);
                     String contentOperation = content.substring(instruction.start, instruction.end + template.symbolEnd().length());
                     values[j] = instruction.execute(content, template);
-                    if(values[j] instanceof Boolean && operations[j].contains("!")){
-                        values[j] = !((Boolean)values[j]);
+                    if(values[j] instanceof Boolean bool && operations[j].contains("!")){
+                        values[j] = !(bool);
                     }else if(contentOperation.length() < operations[j].length()){
                         values[j] += operations[j].substring(contentOperation.length() + 1, operations[j].length());
                     }
@@ -135,8 +135,10 @@ public class IF extends InstructionMultiple {
             if(operations.length > 1){
                 results[i] = result(Resolver.number(values[0]), Resolver.number(values[1]), operator(split[i]));
             } else {
-                if(values[0] instanceof Boolean){
-                    results[i] = ((Boolean)values[0]);
+                if(values[0] instanceof Boolean bool){
+                    results[i] = bool;
+                } else if(values[0] instanceof String str) {
+                    results[i] = str.trim().equalsIgnoreCase("true");
                 }
             }
         }
