@@ -16,12 +16,12 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
     /**
      * out
      */
-    protected String out = "";
+    protected String out;
 
     /**
      * path
      */
-    protected String path = "";
+    protected String path;
 
     /**
      * internal
@@ -107,16 +107,15 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * @param type t
      * @param functionAddObjects t
      */
-    public <Type> T objects(Class<Type> type, FunctionAddObjects<Type> functionAddObjects) {
+    public <Type> void addObjects(Class<Type> type, FunctionAddObjects<Type> functionAddObjects) {
         functionsAddObjects.add((ObjectFunctionAddObjects<Object>) new ObjectFunctionAddObjects<>(functionAddObjects, type));
-        return (T) this;
     }
 
     /**
      * objects
      * @param objects o
      */
-    public T objects(Object ... objects) {
+    public void addObjects(Object ... objects) {
         if (objects != null) {
             for (Object o: objects) {
                 for (ObjectFunctionAddObjects<Object> objectFunctionAddObjects: functionsAddObjects) {
@@ -128,7 +127,6 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
                 }
             }
         }
-        return (T) this;
     }
 
     /**
@@ -137,8 +135,7 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * @param object o
      */
     public T object(String name, Object object) {
-        objects.add(new ObjectDataLoad("", name, object));
-        return (T) this;
+        return this.object("", name, object);
     }
 
     /**
@@ -147,8 +144,13 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * @param name name
      * @param object o
      */
-    public T objectTemplate(String templates, String name, Object object) {
+    public T object(String templates, String name, Object object) {
         objects.add(new ObjectDataLoad(templates, name, object));
+        for (var template : this.templates) {
+            if (FileController.containsKey(templates, template.name())) {
+                template.template().object(name, object);
+            }
+        }
         return (T) this;
     }
 
@@ -164,7 +166,7 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
             for (ObjectTemplate o: templates()) {
                 if (FileController.containsKey(names, o.name())) {
                     try {
-                        objects(objects);
+                        this.addObjects(objects);
                         FileController.create(out, o.template());
                     } catch (TemplateObjectNotFoundException e) {
                         System.out.println(o.name() + ": " + e.getMessage());
@@ -183,7 +185,7 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
     public T process(Object ... objects) {
         for (ObjectTemplate o: templates()) {
             try {
-                objects(objects);
+                this.addObjects(objects);
                 FileController.create(out, o.template());
             } catch (TemplateObjectNotFoundException e) {
                 System.out.println(o.name() + ": " + e.getMessage());

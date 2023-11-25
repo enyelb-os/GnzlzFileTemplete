@@ -66,9 +66,9 @@ public class IF extends InstructionMultiple {
      */
     @Override
     public Object execute(String content, Template template) throws TemplateObjectNotFoundException {
-        String contentif = content.substring(start + start(template), end);
-        boolean results[] = prepareData(contentif, content, template);
-        if(type == Type.ELSE || validateResults(results, contentif)){
+        String contentIf = content.substring(start + start(template), end);
+        boolean[] results = prepareData(contentIf, content, template);
+        if(type == Type.ELSE || validateResults(results, contentIf)){
             String resultContent = "";
             int i = Utils.positionStartCharacterValid(content, end + template.symbolEnd().length(), endInstruction.start);
             for (InstructionSimple instruction: internals) {
@@ -102,17 +102,17 @@ public class IF extends InstructionMultiple {
 
     /**
      * prepareData
-     * @param contentif c
+     * @param contentIf c
      * @param content c
      * @param template t
      */
-    private boolean[] prepareData(String contentif, String content, Template template) throws TemplateObjectNotFoundException {
-        String split[] = contentif.split("(AND|OR)");
-        boolean results[] = new boolean[split.length];
+    private boolean[] prepareData(String contentIf, String content, Template template) throws TemplateObjectNotFoundException {
+        String[] split = contentIf.split("(AND|OR)");
+        boolean[] results = new boolean[split.length];
         int var = 0;
         for (int i = 0; i < split.length; i++) {
-            String operations[] = split[i].split("(==|!=|>|>=|<|<=)");
-            Object values[] = new Object[operations.length];
+            String[] operations = split[i].split("(==|!=|>|>=|<|<=)");
+            Object[] values = new Object[operations.length];
             for (int j = 0; j<operations.length; j++) {
                 if(operations[j].contains("VAR")){
                     InstructionSimple instruction = arguments.get(var);
@@ -214,7 +214,7 @@ public class IF extends InstructionMultiple {
      * @param results r
      * @param expression e
      */
-    private boolean validateResults(boolean results[], String expression){
+    private boolean validateResults(boolean[] results, String expression){
         Pattern pattern = Pattern.compile("(AND|OR)");
         Matcher matcher = pattern.matcher(expression);
         ArrayList<String> types = new ArrayList<>();

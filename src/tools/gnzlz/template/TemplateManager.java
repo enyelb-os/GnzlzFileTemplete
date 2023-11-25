@@ -1,5 +1,8 @@
 package tools.gnzlz.template;
 
+import tools.gnzlz.template.loader.controller.FileController;
+import tools.gnzlz.template.loader.data.ObjectDataLoad;
+
 import java.util.ArrayList;
 
 public class TemplateManager {
@@ -136,6 +139,28 @@ public class TemplateManager {
      */
     public ArrayList<TemplateLoader<?>> templates(){
         return templates;
+    }
+
+    /**
+     * objects
+     * @param templates t
+     * @param name name
+     * @param object o
+     */
+    public TemplateManager object(String templates, String name, Object object) {
+        for (var template : this.templates) {
+            template.object(templates, name, object);
+        }
+        return this;
+    }
+
+    /**
+     * objects
+     * @param name name
+     * @param object o
+     */
+    public TemplateManager object(String name, Object object) {
+        return this.object("", name, object);
     }
 
     /**
