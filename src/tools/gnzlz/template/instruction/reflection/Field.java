@@ -26,7 +26,6 @@ public class Field {
             if(objectCurrent != null){
                 object = objectCurrent;
                 k = i + 1;
-                break;
             }
             current+=".";
         }
