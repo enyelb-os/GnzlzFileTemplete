@@ -1,5 +1,7 @@
 package tools.gnzlz.template;
 
+import tools.gnzlz.system.ansi.Color;
+import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
 import tools.gnzlz.template.loader.data.ObjectDataLoad;
 import tools.gnzlz.template.loader.data.ObjectFileLoad;
@@ -169,7 +171,7 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
                         this.addObjects(objects);
                         FileController.create(out, o.template());
                     } catch (TemplateObjectNotFoundException e) {
-                        System.out.println(o.name() + ": " + e.getMessage());
+                        SystemIO.OUT.println(Color.RED.print(o.name() + ": " + e.getMessage()));
                         break;
                     }
                 }
@@ -188,7 +190,7 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
                 this.addObjects(objects);
                 FileController.create(out, o.template());
             } catch (TemplateObjectNotFoundException e) {
-                System.out.println(o.name() + ": " + e.getMessage());
+                SystemIO.OUT.println(Color.RED.print(o.name() + ": " + e.getMessage()));
                 break;
             }
         }

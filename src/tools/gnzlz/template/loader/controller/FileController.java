@@ -1,5 +1,7 @@
 package tools.gnzlz.template.loader.controller;
 
+import tools.gnzlz.system.ansi.Color;
+import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.template.Template;
 import tools.gnzlz.template.exceptions.TemplateObjectNotFoundException;
 import tools.gnzlz.template.file.File;
@@ -24,7 +26,7 @@ public class FileController {
         if (objectFile.exist()) {
             return new ObjectTemplate(name, path+url, Template.template(objectFile.content()));
         } else {
-            System.out.println("Error" + objectFile.content());
+            SystemIO.OUT.println(Color.RED.print("Error" + objectFile.content()));
         }
         return null;
     }

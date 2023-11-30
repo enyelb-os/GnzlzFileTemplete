@@ -56,7 +56,6 @@ public class VAR extends InstructionSimple {
         /**
          * run instuccion
          */
-        //System.out.println(content.substring(start, end + template.symbolEnd().length()) + " : "+Field.reflection(template.data(), resultContent, objects));
         return Field.reflection(template.data(), resultContent, objects);
     }
 }
