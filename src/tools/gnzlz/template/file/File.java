@@ -1,5 +1,7 @@
 package tools.gnzlz.template.file;
 
+import tools.gnzlz.system.ansi.Color;
+import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.template.file.data.ObjectFile;
 
 import java.io.*;
@@ -85,7 +87,7 @@ public class File {
         try {
             java.io.File folder = new java.io.File(url);
             if(!folder.exists()){
-                folder.mkdirs();
+                boolean mkdirs = folder.mkdirs();
             }
             java.io.File file = new java.io.File(folder.toPath() + "/" + name );
             if(!file.exists() || replace) {
@@ -95,7 +97,7 @@ public class File {
                 FileWriter fileWriter = new FileWriter(file.toString());
                 fileWriter.write(content);
                 fileWriter.close();
-                System.out.println("file crated: " + file);
+                SystemIO.OUT.println(Color.GREEN.print("file crated: ") + Color.PURPLE.print(file));
                 return new ObjectFile(true, "");
             }
         } catch (IOException e) {
