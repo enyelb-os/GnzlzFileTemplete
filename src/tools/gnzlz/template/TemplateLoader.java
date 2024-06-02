@@ -54,14 +54,27 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * TemplateLoader
      * @param path p
      * @param out o
+     * @param templateObjects t
      */
-    protected TemplateLoader(String path, String out){
+    protected TemplateLoader(String path, String out, TemplateObjects templateObjects){
         this.templates = new ArrayList<>();
         this.functionsAddObjects = new ArrayList<>();
         this.files = new ArrayList<>();
         this.objects = new ArrayList<>();
         this.path = path;
         this.out = out;
+        if (templateObjects != null) {
+            templateObjects.setObjects(this);
+        }
+    }
+
+    /**
+     * TemplateLoader
+     * @param path p
+     * @param out o
+     */
+    protected TemplateLoader(String path, String out){
+        this(path, out, null);
     }
 
     /**
@@ -69,14 +82,14 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * @param path p
      */
     protected TemplateLoader(String path){
-       this(path, "");
+       this(path, "", null);
     }
 
     /**
      * TemplateLoader
      */
     protected TemplateLoader(){
-        this("", "");
+        this("", "", null);
     }
 
     /**
@@ -100,7 +113,17 @@ public class TemplateLoader<T extends TemplateLoader<?>> {
      * @param out o
      */
     public static TemplateLoader<?> create(String path, String out){
-        return new TemplateLoader<>(path, out);
+        return new TemplateLoader<>(path, out, null);
+    }
+
+    /**
+     * create
+     * @param path p
+     * @param out o
+     * @param templateObjects t
+     */
+    public static TemplateLoader<?> create(String path, String out, TemplateObjects templateObjects){
+        return new TemplateLoader<>(path, out, templateObjects);
     }
 
     /**

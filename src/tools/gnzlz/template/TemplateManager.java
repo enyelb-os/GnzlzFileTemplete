@@ -4,6 +4,7 @@ import tools.gnzlz.template.loader.controller.FileController;
 import tools.gnzlz.template.loader.data.ObjectDataLoad;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public class TemplateManager {
 
@@ -169,5 +170,31 @@ public class TemplateManager {
     public TemplateManager test(){
         templates.forEach(TemplateLoader::templates);
         return this;
+    }
+
+    /**
+     * processObjects
+     * @param templates t
+     * @param objects o
+     */
+    public static void processObjects(ArrayList<TemplateLoader<?>> templates, Object ... objects) {
+        templates.forEach(template -> {
+            template.addObjects(objects);
+        });
+    }
+
+    /**
+     * processTemplate
+     * @param names n
+     * @param templates t
+     * @param predicate p
+     * @param objects o
+     */
+    public static void processTemplate(StringBuilder names, boolean process, ArrayList<TemplateLoader<?>> templates, Predicate<? super TemplateLoader<?>> predicate, Object ... objects) {
+        if (process) {
+            templates.stream().filter(predicate).forEach(template -> {
+                template.process(names.toString(), objects);
+            });
+        }
     }
 }

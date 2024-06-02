@@ -107,6 +107,9 @@ public class IF extends InstructionMultiple {
      * @param template t
      */
     private boolean[] prepareData(String contentIf, String content, Template template) throws TemplateObjectNotFoundException {
+        if (contentIf == null || contentIf.isEmpty()) {
+            return new boolean[1];
+        }
         String[] split = contentIf.split("(AND|OR)");
         boolean[] results = new boolean[split.length];
         int var = 0;
